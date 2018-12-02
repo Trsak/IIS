@@ -31,7 +31,9 @@
 		"nette/utils": "^3.0",
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^3.0",
-		"dg/adminer-custom": "^1.8"
+		"dg/adminer-custom": "^1.8",
+		"scriptotek/google-books": "dev-master",
+		"pagerfanta/pagerfanta": "^1.0@dev"
 	},
 	"require-dev": {
 		"nette/tester": "^2.0"

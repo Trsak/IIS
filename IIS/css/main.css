@@ -1,13 +1,48 @@
+html {
+    position: relative;
+    height: 100%!important;
+}
+
 body {
-  padding-top: 54px;
+    padding-top: 54px;
+    height: 100%!important;
 }
 
 @media (min-width: 992px) {
-  body {
-    padding-top: 56px;
-  }
+    body {
+        padding-top: 56px;
+    }
 }
 
 .divider {
-  margin-top: 10px;
+    margin-top: 10px;
+}
+
+.btn-secondary {
+    background-color: rgba(0, 0, 0, .03);
+}
+
+.has-error .form-control {
+    border-color: red;
+}
+
+img.card-img-custom {
+    max-height: 200px;
+}
+
+.card-img-link {
+    height: 200px!important;
+}
+
+.card-title {
+    font-size: 16px;
+}
+
+.card-text {
+    font-size: 10px;
+}
+
+a.button-link:hover {
+    text-underline: none;
+    text-decoration: none;
 }

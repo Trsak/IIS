@@ -1,34 +1,74 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="iLibrary is the best online library!">
+    <meta name="author" content="Petr Šopf (xsopfp00@stud.fit.vutbr.cz); Jan Bartošek (xbarto92@stud.fit.vutbr.cz)">
 
-    <title>iKnihovna</title>
+    <title>iLibrary {ifset #title}| {include #title}{/ifset}</title>
 
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link href="{$basePath}/css/main.css" rel="stylesheet">
+    <link href="{$basePath}/css/notifications.css" rel="stylesheet">
 </head>
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="main-menu navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="{link Homepage:}">iKnihovna</a>
+        <a class="navbar-brand" href="{link Homepage:}"><i class="fas fa-book-open"></i> iLibrary</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Přihlášení</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item{if $presenter->isLinkCurrent('Homepage:default')} active{/if}">
+                    <a class="nav-link" href="{link Homepage:}">List of literature</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Registrace</a>
+                    <a class="nav-link" href="#">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Price list</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    {if $user->isLoggedIn()}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                {$user->getIdentity()->name} {$user->getIdentity()->last_name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                {if $user->getIdentity()->employee}
+                                    <a class="dropdown-item" n:href="Employee:Literature"><i
+                                                class="fas fa-list-alt"></i> Manage literature</a>
+                                {else}
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                {/if}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" n:href="User:Logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    {else}
+                        <a href="{link Login:}">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-user"></i> Login
+                            </button>
+                        </a>
+                    {/if}
                 </li>
             </ul>
         </div>
@@ -36,178 +76,71 @@
 </nav>
 
 <!-- Page Content -->
-<div class="container">
-
-    <div class="row">
-        <div class="col-lg-3 my-4">
-            <div class="row">
-                <div class="col-12">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Hledat podle názvu"
-                           aria-label="Hledat podle názvu">
-                </div>
-            </div>
-            <div class="row divider">
-                <div class="col-12">
-                    <select class="custom-select">
-                        <option value="1">Seřadit od nejnovějšího</option>
-                        <option value="2">Seřadit od nejstaršího</option>
-                        <option value="3">Seřadit podle názvu vzestupně</option>
-                        <option value="4">Seřadit podle názvu sestupně</option>
-                        <option value="5">Seřadit od nejlépe hodnoceného</option>
-                        <option value="6">Seřadit od nejhůře hodnoceného</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row divider">
-                <div class="col-12">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item"><i class="fas fa-book"></i> Category 1</a>
-                        <a href="#" class="list-group-item"><i class="fas fa-book"></i> Category 2</a>
-                        <a href="#" class="list-group-item"><i class="fas fa-book"></i> Category 3</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row divider">
-                <div class="col-12">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item"><i class="fas fa-times"></i> Zrušit filtrování</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /.col-lg-3 -->
-
-        <div class="col-lg-9 my-4">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">Item One</a>
-                            </h4>
-                            <h5>$24.99</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam
-                                aspernatur!</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">Item Two</a>
-                            </h4>
-                            <h5>$24.99</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam
-                                aspernatur! Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">Item Three</a>
-                            </h4>
-                            <h5>$24.99</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam
-                                aspernatur!</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">Item Four</a>
-                            </h4>
-                            <h5>$24.99</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam
-                                aspernatur!</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">Item Five</a>
-                            </h4>
-                            <h5>$24.99</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam
-                                aspernatur! Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">Item Six</a>
-                            </h4>
-                            <h5>$24.99</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam
-                                aspernatur!</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <!-- /.row -->
-
-        </div>
-        <!-- /.col-lg-9 -->
-
-    </div>
-    <!-- /.row -->
-
+<div class="container h-100">
+    {include content}
 </div>
-<!-- /.container -->
 
-<!-- Footer -->
-<footer class="py-5 bg-dark">
-    <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
-    </div>
-    <!-- /.container -->
-</footer>
-
-<!-- Bootstrap core JavaScript -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.18/datatables.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"
         integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0"
         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="{$basePath}/js/notifications.js"></script>
+<script src="{$basePath}/js/live-form-validation.js"></script>
+<script>
+    LiveFormOptions = {
+        messageErrorPrefix: 'Error: ',
+        wait: 500
+    };
 
+    {foreach $flashes as $flash}
+    window.createNotification({
+        closeOnClick: true,
+        displayCloseButton: false,
+        positionClass: 'nfc-top-right',
+        showDuration: 3500,
+        theme: {$flash->type|lower}
+    })({
+        title: {$flash->type},
+        message: {$flash->message}
+    });
+    {/foreach}
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#dataTable').dataTable({
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false,
+            }]
+        });
+    });
+
+    $('a.removeButton').confirm({
+        title: 'Are you sure?',
+        content: 'Do you really want to delete this item?',
+        theme: 'bootstrap',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            Delete: function(){
+                location.href = this.$target.attr('href');
+            },
+            Cancel: function(){
+            }
+        }
+    });
+</script>
 </body>
 
 </html>

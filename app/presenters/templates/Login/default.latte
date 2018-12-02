@@ -1,0 +1,35 @@
+{block title}Member login{/block}
+{block content}
+    <div class="row align-items-center h-100">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Member login</h3>
+                </div>
+                <div class="card-body">
+                    {form loginForm}
+                        <div class="alert alert-danger" role="alert" n:if="$form->hasErrors()">
+                            {foreach $form->errors as $error}<strong>ERROR: </strong>{$error}<br>{/foreach}
+                        </div>
+                        <div class="form-group">
+                            {label email}Email address{/label}
+                            {input email, class => "form-control"}
+                        </div>
+                        <div class="form-group">
+                            {label password}Password{/label}
+                            {input password, class => "form-control"}
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="rememberCheck" n:name="remember">
+                            <label class="custom-control-label" for="rememberCheck">Remember login</label>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" n:name="login">Login</button>
+                        <div class="dropdown-divider"></div>
+                        <a href="#">Did you forget the password?</a>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
