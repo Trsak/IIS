@@ -3,10 +3,10 @@
 {block title}{$fullTitle}{/block}
 {block content}
     <div class="row my-4">
+        <div class="col-12">
+            <h2>{$fullTitle}</h2><hr>
+        </div>
         <div class="col-lg-2 col-12 text-center">
-            <a href="{link Homepage:}" class="button-link">
-                <button type="button" class="btn btn-primary btn-block">Back to list</button>
-            </a> <br>
             <img class="card-img-custom"
                  src="{if $literature->image}{$literature->image}{else}{$basePath}/img/no-cover.jpg{/if}"
                  alt="{$fullTitle}"><br><br>
@@ -15,15 +15,16 @@
             </a>
         </div>
         <div class="col-10">
-            <h2>{$fullTitle}</h2>
-            <i>{$literature->pieces_total-$literature->pieces_borrowed} pieces left out of {$literature->pieces_total}</i>
-            total<br>
             <strong>Publisher</strong>: {$literature->publisher}<br>
             <strong>Authors</strong>: {foreach $authors as $author}{$author->author}{if !$iterator->last}, {/if}{/foreach}
             <br>
-            <strong>Publicated</strong>: {if $validDate}{$literature->publication_date|date:'%d/%m/%Y'}{else}Unknown{/if}<br>
+            <strong>Publicated</strong>: {if $validDate}{$literature->publication_date|date:'%d/%m/%Y'}{else}Unknown{/if}
+            <br>
             <strong>Pages</strong>: {$literature->pages_number}<br>
             <p><strong>Description</strong>:<br> {$literature->description}</p>
+            <i>{$literature->pieces_total-$literature->pieces_borrowed} pieces left out
+                of {$literature->pieces_total}</i>
+            total<br>
         </div>
     </div>
 {/block}

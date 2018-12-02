@@ -46,3 +46,7 @@ a.button-link:hover {
     text-underline: none;
     text-decoration: none;
 }
+
+.map-row {
+    min-height: 500px;
+}

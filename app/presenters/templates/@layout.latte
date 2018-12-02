@@ -31,14 +31,11 @@
                 <li class="nav-item{if $presenter->isLinkCurrent('Homepage:default')} active{/if}">
                     <a class="nav-link" href="{link Homepage:}">List of literature</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
+                <li class="nav-item{if $presenter->isLinkCurrent('PriceList:default')} active{/if}">
+                    <a class="nav-link" href="{link PriceList:}">Price list</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Price list</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                <li class="nav-item{if $presenter->isLinkCurrent('Contact:default')} active{/if}">
+                    <a class="nav-link" href="{link Contact:}">Contact</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
@@ -65,7 +62,7 @@
                     {else}
                         <a href="{link Login:}">
                             <button class="btn btn-secondary">
-                                <i class="fas fa-user"></i> Login
+                                <i class="fas fa-user"></i> Member login
                             </button>
                         </a>
                     {/if}
