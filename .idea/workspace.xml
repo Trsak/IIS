@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f03365e7-7328-4f4a-97e6-b175bc9e82d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/presenters/templates/Employee/editMember.latte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/presenters/templates/Employee/members.latte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/model/UserManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/UserManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/presenters/EmployeePresenter.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/presenters/EmployeePresenter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/presenters/SecureEmployeePresenter.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/presenters/SecureEmployeePresenter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/presenters/templates/@layout.latte" beforeDir="false" afterPath="$PROJECT_DIR$/app/presenters/templates/@layout.latte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/presenters/templates/Employee/literature.latte" beforeDir="false" afterPath="$PROJECT_DIR$/app/presenters/templates/Employee/literature.latte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/autoload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/presenters/templates/Login/default.latte" beforeDir="false" afterPath="$PROJECT_DIR$/app/presenters/templates/Login/default.latte" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +40,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/presenters/templates/Employee/editMember.latte">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="353">
@@ -68,6 +60,36 @@
               <folding>
                 <element signature="e#60#97#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/model/UserManager.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="134" column="110" selection-start-line="134" selection-start-column="110" selection-end-line="134" selection-end-column="110" />
+              <folding>
+                <element signature="e#55#68#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/presenters/templates/Login/default.latte">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="560">
+              <caret line="26" column="116" selection-start-line="26" selection-start-column="116" selection-end-line="26" selection-end-column="116" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/model/LiteratureManager.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="64" column="28" lean-forward="true" selection-start-line="64" selection-start-column="28" selection-end-line="64" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -124,6 +146,7 @@
       <find>remove</find>
       <find>addMemberForm</find>
       <find>selec</find>
+      <find>inser</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -141,7 +164,6 @@
         <option value="$PROJECT_DIR$/app/presenters/UserPresenter.php" />
         <option value="$PROJECT_DIR$/app/presenters/LoginPresenter.php" />
         <option value="$PROJECT_DIR$/app/presenters/BasePresenter.php" />
-        <option value="$PROJECT_DIR$/app/presenters/templates/Login/default.latte" />
         <option value="$PROJECT_DIR$/app/presenters/templates/Employee/addLiterature.latte" />
         <option value="$PROJECT_DIR$/app/presenters/templates/Employee/default.latte" />
         <option value="$PROJECT_DIR$/app/config/config.neon" />
@@ -160,10 +182,11 @@
         <option value="$PROJECT_DIR$/app/presenters/SecureEmployeePresenter.php" />
         <option value="$PROJECT_DIR$/app/presenters/templates/Employee/literature.latte" />
         <option value="$PROJECT_DIR$/app/presenters/templates/@layout.latte" />
-        <option value="$PROJECT_DIR$/app/model/UserManager.php" />
         <option value="$PROJECT_DIR$/app/presenters/templates/Employee/members.latte" />
         <option value="$PROJECT_DIR$/app/presenters/EmployeePresenter.php" />
         <option value="$PROJECT_DIR$/app/presenters/templates/Employee/editMember.latte" />
+        <option value="$PROJECT_DIR$/app/model/UserManager.php" />
+        <option value="$PROJECT_DIR$/app/presenters/templates/Login/default.latte" />
       </list>
     </option>
   </component>
@@ -355,12 +378,12 @@
       <workItem from="1543407884794" duration="274000" />
       <workItem from="1543759400562" duration="29788000" />
       <workItem from="1543791050044" duration="2276000" />
-      <workItem from="1543839449106" duration="6610000" />
+      <workItem from="1543839449106" duration="7997000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42220000" />
+    <option name="totallyTimeSpent" value="43607000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -560,20 +583,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/LiteratureManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="31" column="5" lean-forward="true" selection-start-line="31" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/presenters/templates/@layout.latte">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="152" column="19" selection-start-line="152" selection-start-column="19" selection-end-line="152" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/presenters/LoginPresenter.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="943">
@@ -584,37 +593,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/UserManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1434">
-          <caret line="99" column="57" lean-forward="true" selection-start-line="99" selection-start-column="57" selection-end-line="99" selection-end-column="57" />
-          <folding>
-            <element signature="e#55#68#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/presenters/templates/Login/default.latte">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/presenters/LiteraturePresenter.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="583">
           <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="32" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/presenters/templates/Employee/members.latte">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="54" column="18" lean-forward="true" selection-start-line="9" selection-start-column="12" selection-end-line="54" selection-end-column="18" />
-          <folding>
-            <element signature="e#531#559#0#HTML" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -632,6 +614,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/presenters/templates/Employee/editMember.latte">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="22" column="53" selection-start-line="22" selection-start-column="53" selection-end-line="22" selection-end-column="53" />
+          <folding>
+            <element signature="e#170#174#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/model/LiteratureManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="64" column="28" lean-forward="true" selection-start-line="64" selection-start-column="28" selection-end-line="64" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/presenters/templates/Employee/members.latte">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="54" column="18" lean-forward="true" selection-start-line="9" selection-start-column="12" selection-end-line="54" selection-end-column="18" />
+          <folding>
+            <element signature="e#531#559#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/presenters/templates/@layout.latte">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="152" column="19" selection-start-line="152" selection-start-column="19" selection-end-line="152" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/presenters/EmployeePresenter.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -642,13 +658,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/presenters/templates/Employee/editMember.latte">
+    <entry file="file://$PROJECT_DIR$/app/model/UserManager.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="22" column="53" selection-start-line="22" selection-start-column="53" selection-end-line="22" selection-end-column="53" />
+        <state relative-caret-position="238">
+          <caret line="134" column="110" selection-start-line="134" selection-start-column="110" selection-end-line="134" selection-end-column="110" />
           <folding>
-            <element signature="e#170#174#0#HTML" expanded="true" />
+            <element signature="e#55#68#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/presenters/templates/Login/default.latte">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="26" column="116" selection-start-line="26" selection-start-column="116" selection-end-line="26" selection-end-column="116" />
         </state>
       </provider>
     </entry>

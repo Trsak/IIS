@@ -6,6 +6,8 @@ namespace App\Model;
 
 use DateTime;
 use Nette;
+use Nette\Mail\Message;
+use Nette\Mail\SendmailMailer;
 use Nette\Security\Passwords;
 
 final class UserManager implements Nette\Security\IAuthenticator
@@ -88,18 +90,63 @@ final class UserManager implements Nette\Security\IAuthenticator
         }
 
         try {
-            $this->database->table(self::TABLE_NAME)->insert([
+            $user = $this->database->table(self::TABLE_NAME)->insert([
                 self::COLUMN_FIRST_NAME => $data->name,
                 self::COLUMN_LAST_NAME => $data->last_name,
                 self::COLUMN_EMAIL => $data->email,
                 self::COLUMN_PHONE => $data->telephone,
                 self::COLUMN_BIRTHDATE => $member_birthdate->format('Y-m-d'),
-                self::COLUMN_MEMBERSHIP_EXPIRATION =>  $member_untilDate->format('Y-m-d'),
+                self::COLUMN_MEMBERSHIP_EXPIRATION => $member_untilDate->format('Y-m-d'),
                 self::COLUMN_PASSWORD_HASH => "",
             ]);
+
+            self::generateNewPassword($user->id);
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
             throw new UserException("Member with this email already exists!");
         }
+    }
+
+    /**
+     * Generates new password and sends it to member email.
+     * @param int $id
+     * @throws UserException
+     */
+    public function generateNewPassword($id): void
+    {
+        $row = $this->database->table(self::TABLE_NAME)
+            ->where(self::COLUMN_ID, $id)
+            ->fetch();
+
+        if (!$row) {
+            throw new UserException("Member with given id does not exist!");
+        }
+
+        $password = self::randomPassword();
+        $passwords = new Passwords();
+
+        $this->database->query('UPDATE user SET', [
+            'password' => $passwords->hash($password)
+        ], 'WHERE id = ?', $id);
+
+        $mail = new Message;
+        $mail->setFrom('iLibrary <xsopfp00@stud.fit.vutbr.cz>')
+            ->addTo($row["email"])
+            ->setSubject('iLibrary - New password')
+            ->setHtmlBody("Hello,<br>new password has been set for your account.<br><strong>Password:</strong> " . $password);
+        $mailer = new SendmailMailer;
+        $mailer->send($mail);
+    }
+
+    private function randomPassword()
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array();
+        $alphaLength = strlen($alphabet) - 1;
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass);
     }
 }
 
