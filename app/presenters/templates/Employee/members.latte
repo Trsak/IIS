@@ -1,34 +1,48 @@
-{block title}Manage literature{/block}
+{block title}Manage members{/block}
 {block content}
     <div class="row my-4">
         <div class="col-12">
-            <h2>Literature
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addLiterature"><i
+            <h2>Members
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMember"><i
                             class="fas fa-plus-circle"></i> Add new
                 </button>
             </h2>
-            <hr>
-        </div>
-        <div class="col-12">
-            <div class="modal fade" id="addLiterature" tabindex="-1" role="dialog"
-                 aria-labelledby="addLiteratureTitle" aria-hidden="true">
+            <div class="modal fade" id="addMember" tabindex="-1" role="dialog"
+                 aria-labelledby="addMemberTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addLiteratureTitle">Add new literature</h5>
+                            <h5 class="modal-title" id="addMemberTitle">Add new member</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        {form addLiteratureForm}
+                        {form addMemberForm}
                             <div class="modal-body">
                                 <div class="form-group">
-                                    {label isbn}ISBN{/label}
-                                    {input isbn, class => "form-control"}
+                                    {label email}Email{/label}
+                                    {input email, class => "form-control"}
                                 </div>
                                 <div class="form-group">
-                                    {label pieces_total}Total pieces{/label}
-                                    {input pieces_total, class => "form-control"}
+                                    {label name}First name{/label}
+                                    {input name, class => "form-control"}
+                                </div>
+                                <div class="form-group">
+                                    {label last_name}Last name{/label}
+                                    {input last_name, class => "form-control"}
+                                </div>
+                                <div class="form-group">
+                                    {label member_until}Membership until{/label}
+                                    {input member_until, class => "form-control membershipPicker"}
+                                </div>
+                                <h5>Optional</h5><hr>
+                                <div class="form-group">
+                                    {label birthdate}Birthdate{/label}
+                                    {input birthdate, class => "form-control birhdatePicker"}
+                                </div>
+                                <div class="form-group">
+                                    {label telephone}Telephone{/label}
+                                    {input telephone, class => "form-control"}
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -39,31 +53,28 @@
                     </div>
                 </div>
             </div>
-            <br>
-            <br>
+            <hr>
+        </div>
+        <div class="col-12">
             <table id="dataTable" class="table table-hover table-striped table-bordered" style="width:100%">
                 <thead>
                 <tr>
-                    <th>ISBN</th>
-                    <th>Title</th>
-                    <th>Publisher</th>
-                    <th>Pieces</th>
+                    <th>Name</th>
+                    <th>Email</th>
                     <th width="1%" style="white-space: nowrap;" class="no-sort">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                {foreach $literatures as $literature}
+                {foreach $members as $member}
                     <tr>
-                        <td>{$literature->isbn}</td>
-                        <td>{if $literature->subtitle}{$literature->title}: {$literature->subtitle}{else}{$literature->title}{/if}</td>
-                        <td>{$literature->publisher}</td>
-                        <td>{$literature->pieces_total-$literature->pieces_borrowed} / {$literature->pieces_total}</td>
+                        <td>{$member->name} {$member->last_name}</td>
+                        <td>{$member->email}</td>
                         <td width="1%" style="white-space: nowrap;">
-                            <a>
+                            <a n:href="Employee:EditMember, id=>$member->id">
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip"
                                         data-placement="top" title="Edit"><i class="fas fa-pen"></i></button>
                             </a>
-                            <a class="removeButton" n:href="Employee:Remove, id=>$literature->id">
+                            <a class="removeButton" n:href="Employee:RemoveMember, id=>$member->id">
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
                                         data-placement="top" title="Remove"><i class="fas fa-times"></i></button>
                             </a>
@@ -72,6 +83,7 @@
                 {/foreach}
                 </tbody>
             </table>
+
         </div>
     </div>
 {/block}

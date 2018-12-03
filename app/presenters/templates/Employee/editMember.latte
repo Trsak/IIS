@@ -1,0 +1,38 @@
+{block title}Edit member {$member->name} {$member->last_name}{/block}
+{block content}
+    <div class="row my-4">
+        <div class="col-12">
+            <h2>Edit &gt; {$member->name} {$member->last_name}
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extendMembership"><i
+                            class="fas fa-plus-circle"></i> Extend/Activate membership
+                </button>
+            </h2>
+            <div class="modal fade" id="extendMembership" tabindex="-1" role="dialog"
+                 aria-labelledby="extendMembershipTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="extendMembershipTitle">Extend/Activate membership</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {form extendMemberForm}
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    {label extendTime}Extend time{/label}
+                                    {input extendTime, class => "custom-select"}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" n:name="extend">Extend / Activate</button>
+                                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                            </div>
+                        {/form}
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+{/block}
