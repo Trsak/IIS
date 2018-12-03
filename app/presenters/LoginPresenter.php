@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use App\Model\LiteratureManager;
 use Nette\Application\UI\Form;
 use Nette\Security\AuthenticationException;
 use Nette\Security\User;
@@ -16,9 +17,9 @@ final class LoginPresenter extends BasePresenter
     /** @var User */
     private $user;
 
-    public function __construct(User $user)
+    public function __construct(User $user, LiteratureManager $literatureManager)
     {
-        parent::__construct();
+        parent::__construct($literatureManager);
         $this->user = $user;
     }
 

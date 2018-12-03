@@ -1,0 +1,33 @@
+{block title}My borrowings{/block}
+{block content}
+    <div class="row my-4">
+        <div class="col-12">
+            <h2>My borrowings</h2>
+            <hr>
+        </div>
+        <div class="col-12">
+            <table id="dataTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Literature</th>
+                    <th>Date borrowed</th>
+                    <th>Date borrowed to</th>
+                    <th>Date returned</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $borrowings as $borrowing}
+                    {var $fullTitle = $borrowing->title}
+                    {if $borrowing->subtitle}{var $fullTitle = $borrowing->title . ": " . $borrowing->subtitle}{/if}
+                    <tr>
+                        <td><a n:href="Literature:, id=>$borrowing->literature_id">{$fullTitle}</a></td>
+                        <td>{$borrowing->borrowing_date|date:'%d/%m/%Y'}</td>
+                        <td>{$borrowing->return_until_date  |date:'%d/%m/%Y'}</td>
+                        <td>{$borrowing->return_date|date:'%d/%m/%Y'}</td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/block}

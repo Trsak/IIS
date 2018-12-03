@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use App\Model\LiteratureManager;
 use Nette;
 
 final class LiteraturePresenter extends BasePresenter
@@ -11,9 +12,9 @@ final class LiteraturePresenter extends BasePresenter
     /** @var Nette\Database\Context */
     private $database;
 
-    public function __construct(Nette\Database\Context $database)
+    public function __construct(Nette\Database\Context $database, LiteratureManager $literatureManager)
     {
-        parent::__construct();
+        parent::__construct($literatureManager);
         $this->database = $database;
     }
 

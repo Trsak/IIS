@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use DateInterval;
 use DateTime;
 use Nette;
 use Nette\Mail\Message;
@@ -107,6 +108,39 @@ final class UserManager implements Nette\Security\IAuthenticator
     }
 
     /**
+     * Updates member
+     * @param int $id
+     * @throws UserException
+     */
+    public function updateMember($id, $values): void
+    {
+        $row = $this->database->table(self::TABLE_NAME)
+            ->where(self::COLUMN_ID, $id)
+            ->fetch();
+
+        if (!$row) {
+            throw new UserException("Member with given id does not exist!");
+        }
+
+        $birthdate = DateTime::createFromFormat('d/m/Y', "00/00/0000");
+        if ($values->birthdate) {
+            $birthdate = DateTime::createFromFormat('d/m/Y', $values->birthdate);
+        }
+
+        try {
+            $this->database->query('UPDATE user SET', [
+                'email' => $values->email,
+                'name' => $values->name,
+                'last_name' => $values->last_name,
+                'birthdate' => $birthdate->format('Y-m-d'),
+                'telephone' => $values->telephone,
+            ], 'WHERE id = ?', $id);
+        } catch (Nette\Database\UniqueConstraintViolationException $e) {
+            throw new UserException("Member with this email already exists!");
+        }
+    }
+
+    /**
      * Generates new password and sends it to member email.
      * @param int $id
      * @throws UserException
@@ -135,6 +169,59 @@ final class UserManager implements Nette\Security\IAuthenticator
             ->setHtmlBody("Hello,<br>new password has been set for your account.<br><strong>Password:</strong> " . $password);
         $mailer = new SendmailMailer;
         $mailer->send($mail);
+    }
+
+    /**
+     * Changes user password
+     * @param int $id
+     * @param $newPass
+     * @throws UserException
+     */
+    public function changePassword($id, $currentPass, $newPass): void
+    {
+        $row = $this->database->table(self::TABLE_NAME)
+            ->where(self::COLUMN_ID, $id)
+            ->fetch();
+
+        if (!$row) {
+            throw new UserException("Given user not found!");
+        } elseif (!$this->passwords->verify($currentPass, $row[self::COLUMN_PASSWORD_HASH])) {
+            throw new UserException("Your current password does not match!");
+        }
+
+        $this->database->query('UPDATE user SET', [
+            'password' => $this->passwords->hash($newPass)
+        ], 'WHERE id = ?', $id);
+    }
+
+    /**
+     * Extends or reactivates member membership
+     * @param int $id
+     * @param $time
+     * @throws UserException
+     */
+    public function extendMembership($id, $time): void
+    {
+        $row = $this->database->table(self::TABLE_NAME)
+            ->where(self::COLUMN_ID, $id)
+            ->fetch();
+
+        if (!$row) {
+            throw new UserException("Member with given id does not exist!");
+        }
+
+        $membershipDate = $row["member_until"];
+        $dateNow = new DateTime();
+        if ($dateNow > $membershipDate) {
+            $membershipDate = $dateNow;
+        }
+
+        $timeInterval = DateInterval::createFromDateString($time);
+        $membershipDate->add($timeInterval);
+
+        $this->database->query('UPDATE user SET', [
+            'member_until' => $membershipDate->format('Y-m-d')
+        ], 'WHERE id = ?', $id);
     }
 
     private function randomPassword()

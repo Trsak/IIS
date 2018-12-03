@@ -48,15 +48,18 @@
                                 <p class="card-text">{$literature->description|truncate:200}</p>
                             </div>
                             <div class="card-footer">
-                                <a class="button-link" href="{link Literature:, id=>$literature->id, title=>$fullTitle}">
+                                <a class="button-link"
+                                   href="{link Literature:, id=>$literature->id, title=>$fullTitle}">
                                     <button type="button" class="btn btn-primary btn-sm"><i
                                                 class="fas fa-info-circle"></i>
                                         Information
                                     </button>
                                 </a>
-                                <button type="button" class="btn btn-success btn-sm"><i class="fas fa-bookmark"></i>
-                                    Borrow
-                                </button>
+                                <a class="button-link" href="{link Homepage:BorrowLiterature, literature => $literature->id}">
+                                    <button type="button" class="btn btn-success btn-sm" {if $literature->pieces_borrowed >= $literature->pieces_total}disabled{/if}><i class="fas fa-bookmark"></i>
+                                        Borrow
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>

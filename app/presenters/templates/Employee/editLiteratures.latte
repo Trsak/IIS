@@ -1,0 +1,48 @@
+{var $fullTitle = $literature->title}
+{if $literature->subtitle}{var $fullTitle = $literature->title . ": " . $literature->subtitle}{/if}
+{block title}Edit literature | {$fullTitle}{/block}
+{block content}
+    <div class="row my-4">
+        <div class="col-12">
+            <h2>Edit &gt; {$fullTitle}</h2>
+            <hr>
+        </div>
+        <div class="col-lg-6 col-12">
+            {form editLiteratureForm}
+                <div class="form-group">
+                    {label title}Title{/label}
+                    {input title, class => "form-control"}
+                </div>
+                <div class="form-group">
+                    {label subtitle}Subtitle (optional){/label}
+                    {input subtitle, class => "form-control"}
+                </div>
+                <div class="form-group">
+                    {label publisher}Publisher{/label}
+                    {input publisher, class => "form-control"}
+                </div>
+                <div class="form-group">
+                    {label publication_date}Publication date (optional){/label}
+                    {input publication_date, class => "form-control birhdatePicker"}
+                </div>
+                <div class="form-group">
+                    {label pages_number}Number of pages{/label}
+                    {input pages_number, class => "form-control"}
+                </div>
+                <div class="form-group">
+                    {label pieces_total}Pieces total{/label}
+                    {input pieces_total, class => "form-control"}
+                </div>
+                <div class="form-group">
+                    {label image}Image (optional){/label}
+                    {input image, class => "form-control"}
+                </div>
+                <div class="form-group">
+                    {label description}Description{/label}
+                    {input description, class => "form-control", rows => 10}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" n:name="edit">Edit</button>
+            {/form}
+        </div>
+    </div>
+{/block}

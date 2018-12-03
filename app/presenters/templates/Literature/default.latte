@@ -4,14 +4,19 @@
 {block content}
     <div class="row my-4">
         <div class="col-12">
-            <h2>{$fullTitle}</h2><hr>
+            <h2>{$fullTitle}</h2>
+            <hr>
         </div>
         <div class="col-lg-2 col-12 text-center">
             <img class="card-img-custom"
                  src="{if $literature->image}{$literature->image}{else}{$basePath}/img/no-cover.jpg{/if}"
                  alt="{$fullTitle}"><br><br>
-            <a href="{link Homepage:}" class="button-link">
-                <button type="button" class="btn btn-success btn-block">Borrow</button>
+            <a class="button-link" href="{link Homepage:BorrowLiterature, literature => $literature->id}">
+                <button type="button" class="btn btn-success btn-sm"
+                        {if $literature->pieces_borrowed >= $literature->pieces_total}disabled{/if}><i
+                            class="fas fa-bookmark"></i>
+                    Borrow
+                </button>
             </a>
         </div>
         <div class="col-10">

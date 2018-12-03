@@ -34,16 +34,46 @@ final class EmployeePresenter extends SecureEmployeePresenter
         $this->userManager = $userManager;
     }
 
+    public function handleReturn($id, $literature): void
+    {
+        $now = new DateTime();
+        $this->database->query('UPDATE borrowing SET', [
+            'return_date' => $now->format('Y-m-d'),
+        ], 'WHERE id = ?', $id);
+
+        $this->database->query('UPDATE literature SET ', [
+            'pieces_borrowed-=' => 1,
+        ], 'WHERE id = ?', $literature);
+
+        $this->redirect("Employee:Borrowings");
+    }
+
     public function renderMembers(): void
     {
         $this->template->members = $this->database->table("user")
             ->fetchAll();
     }
 
+    public function renderBorrowings(): void
+    {
+        $borrowings = $this->database->table("borrowing")->select("borrowing.*, user.name, user.last_name, user.email, literature.title, literature.subtitle")->joinWhere("user", "user.id = borrowing.user_id")->joinWhere("literature", "literature.id = borrowing.literature_id")->fetchAll();
+        $this->template->borrowings = $borrowings;
+    }
+
     public function renderLiterature(): void
     {
         $this->template->literatures = $this->database->table("literature")
             ->fetchAll();
+    }
+
+    public function renderEditLiteratures(int $id): void
+    {
+        $literature = $this->database->table("literature")->where("id = ?", $id)->fetch();
+        if (!$literature) {
+            $this->flashMessage("Literature was not found.", "Error");
+            $this->redirect("Homepage:");
+        }
+        $this->template->literature = $literature;
     }
 
     public function renderEditMember(int $id): void
@@ -58,6 +88,10 @@ final class EmployeePresenter extends SecureEmployeePresenter
 
     public function actionRemoveMember(int $id): void
     {
+        $this->database->table('borrowing')
+            ->where('user_id', $id)
+            ->delete();
+
         $this->database->table('user')
             ->where('id', $id)
             ->delete();
@@ -80,18 +114,192 @@ final class EmployeePresenter extends SecureEmployeePresenter
         $this->redirect("Employee:Literature");
     }
 
+    protected function createComponentAddBorrowingForm(): Form
+    {
+        $users = $this->database->table("user")->select("id, name, last_name, email")
+            ->fetchAll();
+
+        $usersData = [];
+        foreach ($users as $user) {
+            $usersData[$user->id] = $user->name . " " . $user->last_name . " (" . $user->email . ")";
+        }
+
+        $literatures = $this->database->table("literature")->select("id, title, subtitle")
+            ->fetchAll();
+
+        $literaturesData = [];
+        foreach ($literatures as $literature) {
+            $literaturesData[$literature->id] = $literature->title;
+            if ($literature->subtitle) {
+                $literaturesData[$literature->id] = $literaturesData[$literature->id] . ": " . $literature->subtitle;
+            }
+        }
+
+        $form = new Form;
+        $form->addSelect('user', '', $usersData)
+            ->setRequired("You have to select member!")
+            ->setPrompt('Select member');
+        $form->addSelect('literature', '', $literaturesData)
+            ->setRequired("You have to select literature!")
+            ->setPrompt('Select literature');
+        $form->addText("return_until", null)
+            ->setRequired('You have to set return until date!');
+        $form->addSubmit("create", null);
+        $form->onSuccess[] = [$this, 'addBorrowingFormSucceeded'];
+        return $form;
+    }
+
+    public function addBorrowingFormSucceeded(Form $form, \stdClass $values): void
+    {
+        try {
+            $this->literatureManager->addBorrowing($values);
+            $this->flashMessage("Borrowing was sucessfully extended.", "Success");
+            $this->redirect("this");
+        } catch (LiteratureAddException $e) {
+            $this->flashMessage($e->getMessage(), "Error");
+        }
+    }
+
     protected function createComponentExtendMemberForm(): Form
     {
         $form = new Form;
         $form->addSelect('extendTime', '', [
-            '+1 month' => 'One month',
-            '+6 months' => 'Six months',
-            '+1 year' => 'One year',
+            '1 month' => 'One month',
+            '6 months' => 'Six months',
+            '1 year' => 'One year',
         ])
             ->setRequired("You have to select extend time!");
         $form->addSubmit("extend", null);
         $form->onSuccess[] = [$this, 'extendMemberFormSucceeded'];
         return $form;
+    }
+
+    public function extendMemberFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $params = $this->request->getParameters();
+        if (isset($params["id"])) {
+            try {
+                $this->userManager->extendMembership($params["id"], $values->extendTime);
+                $this->flashMessage("Membership was sucessfully extended.", "Success");
+                $this->redirect("this");
+            } catch (UserException $e) {
+                $this->flashMessage($e->getMessage(), "Error");
+            }
+        }
+    }
+
+    protected function createComponentEditLiteratureForm(): Form
+    {
+        $form = new Form;
+        $form->addText("title", null)
+            ->setRequired('Please insert title.');
+        $form->addText("subtitle", null);
+        $form->addText("publisher", null)
+            ->setRequired('Please insert publisher.');
+        $form->addText("publication_date", null);
+        $form->addText("pages_number", null)
+            ->addRule(Form::INTEGER, 'Number of pages must be number!')
+            ->setRequired('Please insert number of pages.');
+        $form->addTextArea("description", null)
+            ->setRequired('Please insert description.');
+        $form->addText("image", null)
+            ->addRule(Form::PATTERN, 'Image must be URL!', '(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&\'\(\)\*\+,;=.]+')
+            ->setRequired(false);
+        $form->addText("pieces_total", null)
+            ->addRule(Form::INTEGER, 'Total pieces must be number!')
+            ->setRequired('Please insert total pieces.');
+        $form->addSubmit("edit", null);
+        $form->onSuccess[] = [$this, 'editLiteratureFormSucceeded'];
+
+        $params = $this->request->getParameters();
+        if (isset($params["id"])) {
+            $user = $this->database->table("literature")
+                ->where("id = ?", $params["id"])
+                ->fetch();
+
+            $form->setDefaults([
+                'title' => $user["title"],
+                'subtitle' => $user["subtitle"],
+                'publisher' => $user["publisher"],
+                'pages_number' => $user["pages_number"],
+                'pieces_total' => $user["pieces_total"],
+                'description' => $user["description"],
+                'image' => $user["image"],
+            ]);
+
+            if (strtotime($user["publication_date"]->format('d/m/Y')) > 0) {
+                $form->setDefaults([
+                    'publication_date' => $user["publication_date"]->format('d/m/Y')
+                ]);
+            }
+        }
+
+        return $form;
+    }
+
+    public function editLiteratureFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $params = $this->request->getParameters();
+        if (isset($params["id"])) {
+            try {
+                $this->literatureManager->updateLiterature($params["id"], $values);
+                $this->flashMessage("Literature was sucessfully extended.", "Success");
+                $this->redirect("this");
+            } catch (UserException $e) {
+                $this->flashMessage($e->getMessage(), "Error");
+            }
+        }
+    }
+
+    protected function createComponentEditMemberForm(): Form
+    {
+        $form = new Form;
+        $form->addEmail("email", null)
+            ->setRequired('Please insert member email.');
+        $form->addText("name", null)
+            ->setRequired('Please insert member name.');
+        $form->addText("last_name", null)
+            ->setRequired('Please insert member last name.');
+        $form->addText("telephone", null);
+        $form->addText("birthdate", null);
+        $form->addSubmit("edit", null);
+        $form->onSuccess[] = [$this, 'editMemberFormSucceeded'];
+
+        $params = $this->request->getParameters();
+        if (isset($params["id"])) {
+            $user = $this->database->table("user")
+                ->where("id = ?", $params["id"])
+                ->fetch();
+
+            $form->setDefaults([
+                'email' => $user["email"],
+                'name' => $user["name"],
+                'last_name' => $user["last_name"],
+                'telephone' => $user["telephone"]
+            ]);
+
+            if (strtotime($user["birthdate"]->format('d/m/Y')) > 0) {
+                $form->setDefaults([
+                    'birthdate' => $user["birthdate"]->format('d/m/Y')
+                ]);
+            }
+        }
+
+        return $form;
+    }
+
+    public function editMemberFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $params = $this->request->getParameters();
+        if (isset($params["id"])) {
+            try {
+                $this->userManager->updateMember($params["id"], $values);
+                $this->flashMessage("Member sucessfully edited.", "Success");
+                $this->redirect("this");
+            } catch (UserException $e) {
+                $this->flashMessage($e->getMessage(), "Error");
+            }
+        }
     }
 
     protected function createComponentAddMemberForm(): Form

@@ -1,0 +1,84 @@
+{block title}Manage borrowings{/block}
+{block content}
+    <div class="row my-4">
+    <div class="col-12">
+        <h2>Borrowings
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBorrowing"><i
+                        class="fas fa-plus-circle"></i> Add new
+            </button>
+        </h2><hr>
+        <div class="modal fade" id="addBorrowing" tabindex="-1" role="dialog"
+             aria-labelledby="addBorrowingTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBorrowingTitle">Add new borrowing</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {form addBorrowingForm}
+                        <div class="modal-body">
+                            {label user}Select member{/label}
+                            <div class="col-12">
+                                <div class="form-group">
+                                    {input user, data-live-search => "true", class => "selectpicker form-control"}
+                                </div>
+                            </div>
+                            {label literature}Select literature{/label}
+                            <div class="col-12">
+                                <div class="form-group">
+                                    {input literature, data-live-search => "true", class => "selectpicker form-control"}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {label return_until}Return until{/label}
+                                {input return_until, class => "form-control membershipPicker"}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" n:name="create">Create</button>
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <table id="dataTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Literature</th>
+                    <th>Date borrowed</th>
+                    <th>Date returned</th>
+                    <th width="1%" style="white-space: nowrap;" class="no-sort">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $borrowings as $borrowing}
+                    {var $fullTitle = $borrowing->title}
+                    {if $borrowing->subtitle}{var $fullTitle = $borrowing->title . ": " . $borrowing->subtitle}{/if}
+                    <tr>
+                        <td>
+                            <a n:href="Employee:EditMember, id=>$borrowing->user_id">{$borrowing->name} {$borrowing->last_name}
+                                ({$borrowing->email})</a></td>
+                        <td><a n:href="Employee:EditLiteratures, id=>$borrowing->literature_id">{$fullTitle}</a></td>
+                        <td>{$borrowing->borrowing_date|date:'%d/%m/%Y'}</td>
+                        <td>{$borrowing->return_date|date:'%d/%m/%Y'}</td>
+                        <td width="1%" style="white-space: nowrap;" class="no-sort">
+                            {if !$borrowing->return_date}
+                                <a n:href="return!, id=>$borrowing->id, literature=>$borrowing->literature_id">
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="top" title="Mark as returned"><i class="fas fa-undo"></i>
+                                    </button>
+                                </a>
+                            {/if}
+                        </td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/block}

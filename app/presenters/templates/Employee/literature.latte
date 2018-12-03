@@ -59,7 +59,7 @@
                         <td>{$literature->publisher}</td>
                         <td>{$literature->pieces_total-$literature->pieces_borrowed} / {$literature->pieces_total}</td>
                         <td width="1%" style="white-space: nowrap;">
-                            <a>
+                            <a n:href="Employee:EditLiteratures, id=>$literature->id">
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip"
                                         data-placement="top" title="Edit"><i class="fas fa-pen"></i></button>
                             </a>

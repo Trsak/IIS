@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use App\Model\LiteratureManager;
 use Nette;
 use Nette\Application\UI\Form;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -15,9 +16,9 @@ final class HomepagePresenter extends BasePresenter
     /** @var Nette\Database\Context */
     private $database;
 
-    public function __construct(Nette\Database\Context $database)
+    public function __construct(Nette\Database\Context $database, LiteratureManager $literatureManager)
     {
-        parent::__construct();
+        parent::__construct($literatureManager);
         $this->database = $database;
     }
 
